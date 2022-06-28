@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Keyboard } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, StyleSheet, ScrollView, FlatList, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native';
 import { Text, Input, Icon, Image, Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
 import ProdutoCard from '../../components/ProdutoCard'
 import CategoriaCard from '../../components/CategoriaCard'
+import { AuthContext } from '../../context/AuthContext'
 
 type CategoriaType = {
     idCategoria: number;
@@ -24,15 +25,18 @@ type ProdutoType = {
 	idCategoria:number;
 }
 
-const Home = ({route, navigation}) => {
+const Home = ({navigation}) => {
 
     const [search, setSearch] = useState('');
 
-    const { token } = route.params;
+    const { user } = useContext(AuthContext);
     // console.log('Params:' + JSON.stringify(route))
     // console.log('Token:' + token)
     const [categoria, setCategoria] = useState<CategoriaType[]>([]);
     const [produto, setProduto] = useState<ProdutoType[]>([]);
+
+    const [isLoadingCategorias, setIsLoadingCategorias] = useState(true);
+    const [isLoadingRecentes, setIsLoadingRecentes] = useState(true);
 
     useEffect(() => {
         getDadosCategoria();
@@ -46,12 +50,27 @@ const Home = ({route, navigation}) => {
     const getDadosCategoria = async () => {
         AxiosInstance.get(
             '/categoria', 
-            {headers: {"Authorization" : `Bearer ${token}`}}
+            {headers: {"Authorization" : `Bearer ${user.token}`}}
         ).then(result => {
             console.log('Dados das categorias:' + JSON.stringify(result.data));
             setCategoria(result.data);
+            setIsLoadingCategorias(false);
         }).catch((error) => {
             console.log("Erro ao carregtar a lista de categorias - " + JSON.stringify(error))
+        })
+    }
+
+
+    const getDadosProduto = async () => {
+        AxiosInstance.get(
+            '/produto', 
+            {headers: {"Authorization" : `Bearer ${user.token}`}}
+        ).then(result => {
+            console.log('Dados dos produtos:' + JSON.stringify(result.data));
+            setProduto(result.data);
+            setIsLoadingRecentes(false);
+        }).catch((error) => {
+            console.log("Erro ao carregtar a lista de produtos - " + JSON.stringify(error))
         })
     }
 
@@ -64,20 +83,6 @@ const Home = ({route, navigation}) => {
             getDadosCategoria();
         }       
     }
-
-
-    const getDadosProduto = async () => {
-        AxiosInstance.get(
-            '/produto', 
-            {headers: {"Authorization" : `Bearer ${token}`}}
-        ).then(result => {
-            console.log('Dados dos produtos:' + JSON.stringify(result.data));
-            setProduto(result.data);
-        }).catch((error) => {
-            console.log("Erro ao carregtar a lista de produtos - " + JSON.stringify(error))
-        })
-    }
-
 
     return (
         <View style={styles.container}>
@@ -110,21 +115,25 @@ const Home = ({route, navigation}) => {
                         autoCompleteType={undefined}
                     />
                 </View>
-                <FlatList 
+                {isLoadingCategorias === true ? 
+                <ActivityIndicator size="large" color="#fff"/>
+                : <FlatList 
                     data={categoria} 
                     style={styles.categoriesContainer} 
                     horizontal={true}
                     renderItem={response => <CategoriaCard categoria={response.item} />} 
-                />
+                /> }
 
                 <Text style={styles.text2}>Recentes</Text>
 
-                <FlatList 
+                {isLoadingRecentes === true ?  
+                <ActivityIndicator size="large" color="#fff"/>
+                : <FlatList 
                     style={styles.recentesContainer} 
                     horizontal={true}
                     data={produto}
                     renderItem={response => <ProdutoCard produto={response.item} />}    
-                />
+                />}
                 <Text style={styles.text3}>Destaques</Text>
                 <View>
                     <Image

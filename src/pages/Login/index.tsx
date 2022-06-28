@@ -1,16 +1,19 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Alert} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {View, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import {Text, Input, Icon, Button} from 'react-native-elements';
-import { LoginService } from '../../services/LoginService';
+import { AuthContext } from '../../context/AuthContext';
 
 const Login = ({navigation}:any) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const { login } = useContext(AuthContext);
+  const [isLoading, setLoading] = useState(false);
 
   const handleLogin = async (email:string, senha:string) => {
     console.log(`Email: ${email} - Senha: ${senha}`)
     
-    const respostaLogin = await LoginService(email, senha);
+    const respostaLogin = await login(email, senha);
+    setLoading(false);
     if(!respostaLogin){
       Alert.alert(
         "Erro",
@@ -21,15 +24,7 @@ const Login = ({navigation}:any) => {
         ]
       )
     }else{
-      navigation.navigate('Home', {
-        screen: 'TabNavigationScreen',
-        params: {
-          screen: 'HomeTabScreen',
-          params: {
-            token: respostaLogin.token,
-          }
-        }
-      })
+      navigation.navigate('Home');
     }
   }
 
@@ -69,12 +64,12 @@ const Login = ({navigation}:any) => {
         }
         placeholderTextColor={'#a295a4'}
       />
-      <Button 
+      {isLoading === false ? <Button 
         buttonStyle={styles.button} 
         title="Login"
         titleStyle={styles.buttonTitle} 
-        onPress={() => handleLogin(email,senha)} 
-        />
+        onPress={() => {handleLogin(email,senha); setLoading(true)}} 
+        /> : <ActivityIndicator size="large" color="#fff"/>}
     </View>
   );
 };
