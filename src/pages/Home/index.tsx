@@ -57,10 +57,10 @@ const Home = ({navigation}) => {
         })
     }
 
-    const pesquisarCategoria = (search:any) => {
+    const pesquisarCategoria = (search:string) => {
         if(search !== ''){
             setCategoria(
-                categoria.filter(res => res.nomeCategoria.includes(search)),
+                categoria.filter(res => res.nomeCategoria.toLowerCase().includes(search.toLowerCase())),
               ); 
         } else {
             getDadosCategoria();
@@ -105,16 +105,16 @@ const Home = ({navigation}) => {
                     style={styles.categoriesContainer} 
                     horizontal={true}
                     renderItem={response => <CategoriaCard categoria={response.item} />} 
-                /> }
+                />}
 
                 <Text style={styles.text2}>Recentes</Text>
 
                 {isLoadingRecentes === true ?  
                 <ActivityIndicator size="large" color="#fff"/>
-                : <FlatList 
+                : <FlatList
+                    data={produto} 
                     style={styles.recentesContainer} 
-                    horizontal={true}
-                    data={produto}
+                    horizontal={true}                    
                     renderItem={response => <ProdutoCard produto={response.item} />}    
                 />}
                 <Text style={styles.text3}>Destaques</Text>
