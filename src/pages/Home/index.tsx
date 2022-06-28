@@ -5,25 +5,8 @@ import AxiosInstance from '../../api/AxiosInstance';
 import ProdutoCard from '../../components/ProdutoCard'
 import CategoriaCard from '../../components/CategoriaCard'
 import { AuthContext } from '../../context/AuthContext'
-
-type CategoriaType = {
-    idCategoria: number;
-    nomeCategoria: string;
-    nomeImagem: string;
-}
-
-type ProdutoType = {
-    idProduto:number;
-	sku:string;
-	nomeProduto:string;
-	descricaoProduto:string;
-	imagemProduto:string;
-	precoProduto:number;
-	nomeFornecedor:string;
-	idFornecedor:number;
-	nomeCategoria:string;
-	idCategoria:number;
-}
+import { CategoriaType } from '../../models/CategoriaType';
+import { ProdutoType } from '../../models/ProdutoType';
 
 const Home = ({navigation}) => {
 
