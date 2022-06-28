@@ -1,22 +1,86 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Keyboard } from 'react-native';
 import { Text, Input, Icon, Image, Card } from 'react-native-elements';
+import AxiosInstance from '../../api/AxiosInstance';
+import ProdutoCard from '../../components/ProdutoCard'
+import CategoriaCard from '../../components/CategoriaCard'
 
-const Home = () => {
+type CategoriaType = {
+    idCategoria: number;
+    nomeCategoria: string;
+    nomeImagem: string;
+}
+
+type ProdutoType = {
+    idProduto:number;
+	sku:string;
+	nomeProduto:string;
+	descricaoProduto:string;
+	imagemProduto:string;
+	precoProduto:number;
+	nomeFornecedor:string;
+	idFornecedor:number;
+	nomeCategoria:string;
+	idCategoria:number;
+}
+
+const Home = ({route, navigation}) => {
 
     const [search, setSearch] = useState('');
 
+    const { token } = route.params;
+    // console.log('Params:' + JSON.stringify(route))
+    // console.log('Token:' + token)
+    const [categoria, setCategoria] = useState<CategoriaType[]>([]);
+    const [produto, setProduto] = useState<ProdutoType[]>([]);
+
+    useEffect(() => {
+        getDadosCategoria();
+        getDadosProduto();
+    }, [])
+
+    useEffect(() => {
+        pesquisarCategoria(search);
+    }, [search])
+
+    const getDadosCategoria = async () => {
+        AxiosInstance.get(
+            '/categoria', 
+            {headers: {"Authorization" : `Bearer ${token}`}}
+        ).then(result => {
+            console.log('Dados das categorias:' + JSON.stringify(result.data));
+            setCategoria(result.data);
+        }).catch((error) => {
+            console.log("Erro ao carregtar a lista de categorias - " + JSON.stringify(error))
+        })
+    }
+
+    const pesquisarCategoria = (search:any) => {
+        if(search !== ''){
+            setCategoria(
+                categoria.filter(res => res.nomeCategoria.includes(search)),
+              ); 
+        } else {
+            getDadosCategoria();
+        }       
+    }
+
+
+    const getDadosProduto = async () => {
+        AxiosInstance.get(
+            '/produto', 
+            {headers: {"Authorization" : `Bearer ${token}`}}
+        ).then(result => {
+            console.log('Dados dos produtos:' + JSON.stringify(result.data));
+            setProduto(result.data);
+        }).catch((error) => {
+            console.log("Erro ao carregtar a lista de produtos - " + JSON.stringify(error))
+        })
+    }
+
+
     return (
         <View style={styles.container}>
-            <View style={styles.nav}>
-                <Image
-                    source={require('../../assets/menuHamburguer.png')}
-                    style={{ width: 20, height: 20 }}
-                    width={undefined}
-                    height={undefined}
-                />
-                <Text style={styles.text}>Delivery</Text>
-            </View>
             <ScrollView style={styles.body}>
                 <View style={styles.searchBox}>
                     <Input
@@ -46,85 +110,21 @@ const Home = () => {
                         autoCompleteType={undefined}
                     />
                 </View>
-                <ScrollView style={styles.categoriesContainer} horizontal={true}>
-                    <TouchableOpacity style={styles.categoryButton} onPress={() => console.log('Categoria 1 foi clicada')}>
-                        <View style={styles.categoryContainer}>
-                            <Text style={styles.categoryText}>Categoria 1</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.categoryButton} onPress={() => console.log('Categoria 2 foi clicada')}>
-                        <View style={styles.categoryContainer}>
-                            <Text style={styles.categoryText}>Categoria 2</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.categoryButton} onPress={() => console.log('Categoria 3 foi clicada')}>
-                        <View style={styles.categoryContainer}>
-                            <Text style={styles.categoryText}>Categoria 3</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.categoryButton} onPress={() => console.log('Categoria 4 foi clicada')}>
-                        <View style={styles.categoryContainer}>
-                            <Text style={styles.categoryText}>Categoria 4</Text>
-                        </View>
-                    </TouchableOpacity>
-                </ScrollView>
+                <FlatList 
+                    data={categoria} 
+                    style={styles.categoriesContainer} 
+                    horizontal={true}
+                    renderItem={response => <CategoriaCard categoria={response.item} />} 
+                />
 
                 <Text style={styles.text2}>Recentes</Text>
 
-                <ScrollView style={styles.recentesContainer} horizontal={true}>
-                    <TouchableOpacity onPress={() => console.log('Recentes 1 foi clicado')}>
-                        <Card containerStyle={styles.recenteContainer}>
-                            <Card.Image
-                                source={require('../../assets/image.png')}
-                                style={{width: 120, height: 120}}
-                                width={undefined}
-                                height={undefined}
-                            />
-                            <Card.Divider />
-                            <Card.Title style={styles.textCardTitle}>Título</Card.Title>
-                            <Text style={styles.textCardDescription}>Descrição</Text>
-                        </Card>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('Recentes 2 foi clicado')}>
-                        <Card containerStyle={styles.recenteContainer}>
-                            <Card.Image
-                                source={require('../../assets/image.png')}
-                                style={{width: 120, height: 120}}
-                                width={undefined}
-                                height={undefined}
-                            />
-                            <Card.Divider />
-                            <Card.Title style={styles.textCardTitle}>Título</Card.Title>
-                            <Text style={styles.textCardDescription}>Descrição</Text>
-                        </Card>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('Recentes 3 foi clicado')}>
-                        <Card containerStyle={styles.recenteContainer}>
-                            <Card.Image
-                                source={require('../../assets/image.png')}
-                                style={{width: 120, height: 120}}
-                                width={undefined}
-                                height={undefined}
-                            />
-                            <Card.Divider />
-                            <Card.Title style={styles.textCardTitle}>Título</Card.Title>
-                            <Text style={styles.textCardDescription}>Descrição</Text>
-                        </Card>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('Recentes 4 foi clicado')}>
-                        <Card containerStyle={styles.recenteContainer}>
-                            <Card.Image
-                                source={require('../../assets/image.png')}
-                                style={{width: 120, height: 120}}
-                                width={undefined}
-                                height={undefined}
-                            />
-                            <Card.Divider />
-                            <Card.Title style={styles.textCardTitle}>Título</Card.Title>
-                            <Text style={styles.textCardDescription}>Descrição</Text>
-                        </Card>
-                    </TouchableOpacity>
-                </ScrollView>
+                <FlatList 
+                    style={styles.recentesContainer} 
+                    horizontal={true}
+                    data={produto}
+                    renderItem={response => <ProdutoCard produto={response.item} />}    
+                />
                 <Text style={styles.text3}>Destaques</Text>
                 <View>
                     <Image
@@ -139,7 +139,7 @@ const Home = () => {
     );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#181717'
@@ -224,13 +224,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 0,
         width: 120,
-        height: 210
+        height: 250
       },
     textCardTitle: {
         color: '#000000',
         textAlign: 'left',
         fontWeight: 'bold',
-        paddingLeft: 10
+        paddingLeft: 10,
+        height: 40
       },
     textCardDescription: {
         color: '#000000',

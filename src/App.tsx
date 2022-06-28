@@ -2,6 +2,7 @@ import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import React from 'react';
 import Login from './pages/Login';
@@ -88,6 +89,59 @@ const BottomTabNavigator = () => {
   );
 }
 
+const DrawerNavigation = createDrawerNavigator();
+const NavigationDrawer = () => {
+  return(
+    <DrawerNavigation.Navigator screenOptions={{
+      drawerStyle: { backgroundColor: '#242222'},
+      drawerActiveTintColor: '#8e10e2',
+      drawerInactiveTintColor: '#fff', }} >
+      <DrawerNavigation.Screen 
+        name="TabNavigationScreen"
+        options={{
+          title: 'Home', 
+          headerStyle: { backgroundColor: '#4c4747'},
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            color: '#fff',
+          },}} 
+        component={BottomTabNavigator}
+        
+      />
+      <DrawerNavigation.Screen 
+        name="CategoriasDrawerScreen"
+        options={{title: 'Categorias', 
+        headerStyle: { backgroundColor: '#4c4747'},
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          color: '#fff',
+        },}}
+        component={Categorias}
+      />
+      <DrawerNavigation.Screen 
+        name="FavoritosDrawerScreen"
+        options={{title: 'Favoritos', 
+        headerStyle: { backgroundColor: '#4c4747'},
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          color: '#fff',
+        },}}
+        component={Favoritos}
+      />
+      <DrawerNavigation.Screen 
+        name="CarrinhoDrawerScreen"
+        options={{title: 'Carrinho', 
+        headerStyle: { backgroundColor: '#4c4747'},
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          color: '#fff',
+        },}}
+        component={Carrinho}
+      />
+    </DrawerNavigation.Navigator>
+  );
+}
+
 const StackNavigation = createNativeStackNavigator();
 
 export default () => {
@@ -101,19 +155,19 @@ export default () => {
         />
         <StackNavigation.Screen 
           name='Home'
-          component={BottomTabNavigator}
+          component={NavigationDrawer}
         />
         <StackNavigation.Screen 
           name='Categorias'
-          component={BottomTabNavigator}
+          component={NavigationDrawer}
         />
         <StackNavigation.Screen 
           name='Favoritos'
-          component={BottomTabNavigator}
+          component={NavigationDrawer}
         />
         <StackNavigation.Screen 
           name='Carrinho'
-          component={BottomTabNavigator}
+          component={NavigationDrawer}
         />
       </StackNavigation.Navigator>
     </NavigationContainer>
