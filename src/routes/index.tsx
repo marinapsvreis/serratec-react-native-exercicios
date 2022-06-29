@@ -7,6 +7,7 @@ import React from 'react';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import Categorias from '../pages/Categorias'
+import Categoria from '../pages/Categoria'
 import Favoritos from '../pages/Favoritos'
 import Carrinho from '../pages/Carrinho'
 import { Icon } from 'react-native-elements';
@@ -27,23 +28,7 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon 
               name='home'
-              color={focused ? "#c763f5" : "#fff"}
-              type='material-community'
-              size={30}
-              tvParallaxProperties={undefined}
-            />
-          ),
-        }}
-      />
-      <TabNavigation.Screen
-        name='CategoriasTabScreen'
-        component={Categorias}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
-            <Icon 
-              name='magnify'
-              color={focused ? "#c763f5" : "#fff"}
+              color={focused ? "#e05456" : "#fff"}
               type='material-community'
               size={30}
               tvParallaxProperties={undefined}
@@ -59,7 +44,7 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon 
               name='heart'
-              color={focused ? "#c763f5" : "#fff"}
+              color={focused ? "#e05456" : "#fff"}
               type='material-community'
               size={30}
               tvParallaxProperties={undefined}
@@ -75,7 +60,7 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon 
               name='basket'
-              color={focused ? "#c763f5" : "#fff"}
+              color={focused ? "#e05456" : "#fff"}
               type='material-community'
               size={30}
               tvParallaxProperties={undefined}
@@ -88,12 +73,12 @@ const BottomTabNavigator = () => {
   );
 }
 
-const DrawerNavigation = createDrawerNavigator();
+export const DrawerNavigation = createDrawerNavigator();
 const NavigationDrawer = () => {
   return(
     <DrawerNavigation.Navigator screenOptions={{
       drawerStyle: { backgroundColor: '#242222'},
-      drawerActiveTintColor: '#8e10e2',
+      drawerActiveTintColor: '#be0003',
       drawerInactiveTintColor: '#fff', }} >
       <DrawerNavigation.Screen 
         name="TabNavigationScreen"
@@ -159,6 +144,10 @@ const Routes = () => {
         <StackNavigation.Screen 
           name='Categorias'
           component={NavigationDrawer}
+        />
+        <StackNavigation.Screen 
+          name='Categoria'
+          component={Categoria}
         />
         <StackNavigation.Screen 
           name='Favoritos'

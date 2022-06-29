@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react';
-
+import React, { useState, useContext } from 'react';
+import { CategoriaContext } from '../context/CategoriaContext';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { Text } from 'react-native-elements';
-import { CategoriaContext } from '../context/CategoriaContext';
-import { styles } from '../pages/Home'
+import { styles } from '../pages/Categorias'
 
-export default function CategoriaCard(props:any){
+export default function CategoriaCard2(props:any){
 
   const [nomeImagem, setNomeImagem] = useState(props.categoria.nomeImagem)
   const { handleCategoria } = useContext(CategoriaContext);
@@ -21,7 +20,7 @@ export default function CategoriaCard(props:any){
           <View style={styles.categoryContainer}>
               <Image 
                 source={{uri: nomeImagem}}
-                style={{width: 120, height: 120}}/>
+                style={{width: 240, height: 240}}/>
               <Text style={styles.categoryText}>{props.categoria.nomeCategoria}</Text>
           </View>
       </TouchableOpacity>

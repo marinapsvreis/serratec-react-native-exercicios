@@ -104,7 +104,7 @@ const Home = ({navigation}) => {
                     data={categoria} 
                     style={styles.categoriesContainer} 
                     horizontal={true}
-                    renderItem={response => <CategoriaCard categoria={response.item} />} 
+                    renderItem={response => <CategoriaCard categoria={response.item} navigation={navigation}/>} 
                 />}
 
                 <Text style={styles.text2}>Recentes</Text>
@@ -184,8 +184,8 @@ export const styles = StyleSheet.create({
     },
     categoryContainer: {
         width: 120,
-        height: 120,
-        backgroundColor: '#8e10e2',
+        height: 180,
+        backgroundColor: '#fff',
         alignContent: 'center',
         justifyContent: 'center'
     },
@@ -195,9 +195,11 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 15
     },
     categoryText: {
-        color: '#fff',
+        color: '#000',
         textAlign: 'center',
-        fontSize: 20
+        textAlignVertical: 'center',
+        fontSize: 20,
+        height: 50,
     },
     categoryTextTitle: {
         color: '#000000',

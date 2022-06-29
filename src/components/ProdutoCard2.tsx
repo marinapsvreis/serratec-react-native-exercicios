@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { TouchableOpacity } from 'react-native';
 import { Text, Card } from 'react-native-elements';
-import { styles } from '../pages/Home'
+import { styles } from '../pages/Categoria'
 
 export default function ProdutoCard(props:any){
 
@@ -13,13 +13,13 @@ export default function ProdutoCard(props:any){
       <Card containerStyle={styles.recenteContainer}>
           <Card.Image
               source={{uri: `${nomeImagem}`}}
-              style={{width: 120, height: 120}}
+              style={{width: 280, height: 280}}
               width={undefined}
               height={undefined}
           />
           <Card.Divider />
           <Card.Title style={styles.textCardTitle}>{props.produto.nomeProduto}</Card.Title>
-          <Text style={styles.textCardDescription}>R$ {parseFloat(props.produto.precoProduto).toFixed(2).replace('.', ',')}</Text>
+          <Text style={styles.textCardDescription}>Valor unitário: R$ {parseFloat(props.produto.precoProduto).toFixed(2).replace('.', ',')}</Text>
       </Card>
    </TouchableOpacity>
   )
