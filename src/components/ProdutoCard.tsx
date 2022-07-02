@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useState, useContext } from 'react';
 
 import { TouchableOpacity } from 'react-native';
 import { Text, Card } from 'react-native-elements';
@@ -8,8 +9,14 @@ export default function ProdutoCard(props:any){
 
   const [nomeImagem, setNomeImagem] = useState(props.produto.imagemProduto)
 
+  const handlePress = () => {
+    props.navigation.navigate({name:'Produto', params: {
+      produto: props.produto
+    }})
+  }
+
   return(
-    <TouchableOpacity onPress={() => console.log(`Produto ${props.nomeProduto} foi clicado`)}>
+    <TouchableOpacity onPress={handlePress}>
       <Card containerStyle={styles.recenteContainer}>
           <Card.Image
               source={{uri: `${nomeImagem}`}}

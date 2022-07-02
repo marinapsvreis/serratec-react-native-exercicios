@@ -115,7 +115,7 @@ const Home = ({navigation}) => {
                     data={produto} 
                     style={styles.recentesContainer} 
                     horizontal={true}                    
-                    renderItem={response => <ProdutoCard produto={response.item} />}    
+                    renderItem={response => <ProdutoCard produto={response.item} navigation={navigation} />}    
                 />}
                 <Text style={styles.text3}>Destaques</Text>
                 <View>
